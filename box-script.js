@@ -190,24 +190,43 @@ function handleRowCheckbox(e) {
 // Toggle all checkboxes
 function toggleAllCheckboxes(e) {
     const checked = e.target.checked;
-    filteredData.forEach(item => {
-        const originalItem = allData.find(i => i.id === item.id);
-        if (originalItem) {
-            originalItem.selected = checked;
-        }
+
+    // First, deselect ALL items (including those not in current filter)
+    allData.forEach(item => {
+        item.selected = false;
     });
+
+    // Then, select only the filtered items if checked
+    if (checked) {
+        filteredData.forEach(item => {
+            const originalItem = allData.find(i => i.id === item.id);
+            if (originalItem) {
+                originalItem.selected = true;
+            }
+        });
+    }
+
     renderTable();
     updateStats();
 }
 
 // Select/deselect all
 function selectAll(selected) {
-    filteredData.forEach(item => {
-        const originalItem = allData.find(i => i.id === item.id);
-        if (originalItem) {
-            originalItem.selected = selected;
-        }
+    // First, deselect ALL items (including those not in current filter)
+    allData.forEach(item => {
+        item.selected = false;
     });
+
+    // Then, select/deselect only the filtered items
+    if (selected) {
+        filteredData.forEach(item => {
+            const originalItem = allData.find(i => i.id === item.id);
+            if (originalItem) {
+                originalItem.selected = true;
+            }
+        });
+    }
+
     renderTable();
     updateStats();
     updateHeaderCheckbox();
